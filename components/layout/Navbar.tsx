@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Menu, X, Zap, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { SERVICE_LINKS } from "@/components/layout/serviceLinks";
 
 const SERVICES = SERVICE_LINKS;
@@ -14,11 +14,11 @@ type NavLink =
   | { label: string; href: string; dropdown: true };
 
 const NAV_LINKS: NavLink[] = [
-  { label: "Home",       href: "/" },
-  { label: "About Us",   href: "/about" },
-  { label: "Services",   href: "/services/engineering-construction", dropdown: true },
+  { label: "Home", href: "/" },
+  { label: "About Us", href: "/about" },
+  { label: "Services", href: "/services/engineering-construction", dropdown: true },
   { label: "Contact Us", href: "/contact" },
-  { label: "News",       href: "/#news" },
+  { label: "News", href: "/#news" },
 ];
 
 function ServicesDropdown({ visible }: { visible: boolean }) {
@@ -30,15 +30,15 @@ function ServicesDropdown({ visible }: { visible: boolean }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
           transition={{ duration: 0.2, ease: "easeOut" }}
-          className="absolute top-full left-0 mt-2 w-[min(90vw,640px)] bg-white shadow-2xl border-t-2 border-[#F5A800] z-[60]"
+          className="absolute left-0 top-full z-[60] mt-3 w-[min(90vw,640px)] border-t-2 border-[#F5A800] bg-white shadow-2xl"
         >
-          <div className="bg-[#0B1F3A] px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center justify-between bg-[#0B1F3A] px-6 py-3">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#F5A800]">
               Our Services
             </p>
             <Link
               href="/services"
-              className="text-xs text-white/50 hover:text-[#F5A800] transition-colors font-medium"
+              className="text-xs font-medium text-white/50 transition-colors hover:text-[#F5A800]"
             >
               View All
             </Link>
@@ -51,28 +51,28 @@ function ServicesDropdown({ visible }: { visible: boolean }) {
                 <Link
                   key={svc.label}
                   href={svc.href}
-                  className="group flex items-center gap-4 px-6 py-4 hover:bg-[#F5A800]/5 transition-colors"
+                  className="group flex items-center gap-4 px-6 py-4 transition-colors hover:bg-[#F5A800]/5"
                 >
-                  <div className="w-10 h-10 bg-[#F5A800]/10 flex items-center justify-center shrink-0 group-hover:bg-[#F5A800] transition-colors">
-                    <Icon className="h-4 w-4 text-[#F5A800] group-hover:text-[#0B1F3A] transition-colors" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-[#F5A800]/10 transition-colors group-hover:bg-[#F5A800]">
+                    <Icon className="h-4 w-4 text-[#F5A800] transition-colors group-hover:text-[#0B1F3A]" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-poppins font-bold text-sm text-[#0B1F3A] group-hover:text-[#F5A800] transition-colors leading-snug">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-poppins text-sm font-bold leading-snug text-[#0B1F3A] transition-colors group-hover:text-[#F5A800]">
                       {svc.label}
                     </p>
-                    <p className="text-xs text-[#0B1F3A]/50 mt-0.5">{svc.desc}</p>
+                    <p className="mt-0.5 text-xs text-[#0B1F3A]/50">{svc.desc}</p>
                   </div>
-                  <ChevronDown className="h-3.5 w-3.5 text-[#0B1F3A]/20 -rotate-90 shrink-0 group-hover:text-[#F5A800] transition-colors" />
+                  <ChevronDown className="h-3.5 w-3.5 shrink-0 -rotate-90 text-[#0B1F3A]/20 transition-colors group-hover:text-[#F5A800]" />
                 </Link>
               );
             })}
           </div>
 
-          <div className="bg-[#F5F7FA] px-6 py-3 flex items-center justify-between border-t border-gray-100">
+          <div className="flex items-center justify-between border-t border-gray-100 bg-[#F5F7FA] px-6 py-3">
             <p className="text-xs text-[#0B1F3A]/50">Need a tailored solution?</p>
             <Link
               href="/contact"
-              className="text-xs font-bold text-[#F5A800] hover:text-[#0B1F3A] transition-colors uppercase tracking-wide"
+              className="text-xs font-bold uppercase tracking-wide text-[#F5A800] transition-colors hover:text-[#0B1F3A]"
             >
               Talk to Us
             </Link>
@@ -103,6 +103,7 @@ export default function Navbar({ active }: { active?: string }) {
         setServicesOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handler);
     return () => {
       document.removeEventListener("mousedown", handler);
@@ -135,21 +136,21 @@ export default function Navbar({ active }: { active?: string }) {
         scrolled ? "bg-[#0B1F3A] shadow-2xl" : "bg-[#0B1F3A]/95 backdrop-blur-sm"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-
-        <Link href="/" className="flex items-center shrink-0">
-          <div className="relative h-[70px] w-[250px] overflow-hidden rounded-md bg-transparent shadow-none sm:h-[75px] sm:w-[250px]">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6 lg:px-8">
+        <Link href="/" className="flex shrink-0 items-center">
+          <div className="relative h-14 w-[200px] overflow-hidden bg-transparent sm:h-16 sm:w-[200px]">
             <Image
               src="/techronlogo.png"
               alt="Techron Integrated Services logo"
               fill
-              sizes="(max-width: 640px) 250px, 250px"
+              priority
+              sizes="150px"
               className="object-contain"
             />
           </div>
         </Link>
 
-        <div className="hidden md:flex items-center gap-1">
+        <div className="hidden items-center gap-2 md:flex">
           {NAV_LINKS.map((link) => {
             const isActive =
               active === link.label ||
@@ -159,8 +160,8 @@ export default function Navbar({ active }: { active?: string }) {
               return (
                 <div
                   key={link.label}
-                  className="relative pb-2"
                   ref={dropdownRef}
+                  className="relative"
                   onMouseEnter={openServicesMenu}
                   onMouseLeave={closeServicesMenu}
                 >
@@ -168,7 +169,7 @@ export default function Navbar({ active }: { active?: string }) {
                     onClick={() => setServicesOpen((v) => !v)}
                     onFocus={openServicesMenu}
                     onBlur={closeServicesMenu}
-                    className={`flex items-center gap-1.5 px-4 py-2 text-sm font-semibold tracking-wide transition-colors rounded-sm ${
+                    className={`flex items-center gap-1.5 rounded-sm px-4 py-2 text-sm font-semibold tracking-wide transition-colors ${
                       isActive || servicesOpen
                         ? "bg-[#F5A800] text-[#0B1F3A]"
                         : "text-white/80 hover:text-[#F5A800]"
@@ -192,7 +193,7 @@ export default function Navbar({ active }: { active?: string }) {
               <Link
                 key={link.label}
                 href={link.href}
-                className={`px-4 py-2 text-sm font-semibold tracking-wide transition-colors rounded-sm ${
+                className={`rounded-sm px-4 py-2 text-sm font-semibold tracking-wide transition-colors ${
                   isActive
                     ? "bg-[#F5A800] text-[#0B1F3A]"
                     : "text-white/80 hover:text-[#F5A800]"
@@ -205,9 +206,10 @@ export default function Navbar({ active }: { active?: string }) {
         </div>
 
         <button
-          className="md:hidden text-white"
+          className="text-white md:hidden"
           onClick={() => setMobileOpen((v) => !v)}
           aria-label="Toggle menu"
+          type="button"
         >
           {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
@@ -220,18 +222,19 @@ export default function Navbar({ active }: { active?: string }) {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="md:hidden bg-[#0B1F3A] border-t border-white/10 overflow-hidden"
+            className="overflow-hidden border-t border-white/10 bg-[#0B1F3A] md:hidden"
           >
-            <div className="px-6 py-4 flex flex-col gap-1">
+            <div className="flex flex-col gap-1 px-6 py-4">
               {NAV_LINKS.map((link) => {
                 if (link.dropdown) {
                   return (
                     <div key={link.label}>
                       <button
                         onClick={() => setMobileServices((v) => !v)}
-                        className={`w-full flex items-center justify-between py-3 text-sm font-semibold transition-colors border-b border-white/5 ${
+                        className={`flex w-full items-center justify-between border-b border-white/5 py-3 text-sm font-semibold transition-colors ${
                           isServicesActive ? "text-[#F5A800]" : "text-white/80"
                         }`}
+                        type="button"
                       >
                         {link.label}
                         <motion.span
@@ -252,24 +255,24 @@ export default function Navbar({ active }: { active?: string }) {
                             transition={{ duration: 0.2 }}
                             className="overflow-hidden"
                           >
-                            <div className="pl-4 py-2 flex flex-col gap-1 border-l-2 border-[#F5A800]/40 ml-2 mb-2">
+                            <div className="mb-2 ml-2 flex flex-col gap-1 border-l-2 border-[#F5A800]/40 py-2 pl-4">
                               {SERVICES.map((svc) => {
                                 const Icon = svc.icon;
                                 return (
                                   <Link
                                     key={svc.label}
                                     href={svc.href}
-                                    className="flex items-center gap-3 py-2.5 group"
+                                    className="group flex items-center gap-3 py-2.5"
                                     onClick={() => setMobileOpen(false)}
                                   >
-                                    <div className="w-7 h-7 bg-[#F5A800]/10 flex items-center justify-center shrink-0">
+                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center bg-[#F5A800]/10">
                                       <Icon className="h-3.5 w-3.5 text-[#F5A800]" />
                                     </div>
                                     <div>
-                                      <p className="text-xs font-semibold text-white/80 group-hover:text-[#F5A800] transition-colors leading-snug">
+                                      <p className="text-xs font-semibold leading-snug text-white/80 transition-colors group-hover:text-[#F5A800]">
                                         {svc.label}
                                       </p>
-                                      <p className="text-[10px] text-white/35 mt-0.5">
+                                      <p className="mt-0.5 text-[10px] text-white/35">
                                         {svc.desc}
                                       </p>
                                     </div>
@@ -278,7 +281,7 @@ export default function Navbar({ active }: { active?: string }) {
                               })}
                               <Link
                                 href="/services"
-                                className="mt-1 text-xs font-bold text-[#F5A800] uppercase tracking-wide py-1"
+                                className="mt-1 py-1 text-xs font-bold uppercase tracking-wide text-[#F5A800]"
                                 onClick={() => setMobileOpen(false)}
                               >
                                 View All Services
@@ -296,7 +299,7 @@ export default function Navbar({ active }: { active?: string }) {
                     key={link.label}
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
-                    className={`py-3 text-sm font-semibold transition-colors border-b border-white/5 ${
+                    className={`border-b border-white/5 py-3 text-sm font-semibold transition-colors ${
                       active === link.label
                         ? "text-[#F5A800]"
                         : "text-white/80 hover:text-[#F5A800]"

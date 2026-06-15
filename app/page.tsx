@@ -6,11 +6,12 @@ import Link from "next/link";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   Phone, Mail, MapPin, Clock,
-  ChevronLeft, ChevronRight, Menu, X,
+  ChevronLeft, ChevronRight,
   ArrowRight, CheckCircle2,
   Wrench, ShoppingCart, Settings, Anchor, Users,
   Send,
 } from "lucide-react";
+import Navbar from "@/components/layout/Navbar";
 import { SERVICE_LINKS } from "@/components/layout/serviceLinks";
 
 // ─── Social Icons ──────────────────────────────────────────────────────────────
@@ -207,156 +208,6 @@ function TopBar() {
         </div>
       </div>
     </div>
-  );
-}
-
-// ─── Navbar ────────────────────────────────────────────────────────────────────
-function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
-  const [mobileServices, setMobileServices] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setServicesOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
-
-  return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "bg-[#0B1F3A] shadow-2xl" : "bg-[#0B1F3A]/95 backdrop-blur-sm"}`}>
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center shrink-0">
-          <div className="relative h-[58px] w-[150px] overflow-hidden rounded-md bg-transparent sm:h-[70px] sm:w-[150px]">
-            <Image
-              src="/techronlogo.png"
-              alt="Techron Integrated Services logo"
-              fill
-              sizes="(max-width: 640px) 150px, 150px"
-              className="object-contain"
-            />
-          </div>
-        </Link>
-
-        <div className="hidden md:flex items-center gap-1">
-          <Link href="/" className="px-4 py-2 text-sm font-semibold tracking-wide transition-colors rounded-sm text-white/80 hover:text-[#F5A800]">
-            Home
-          </Link>
-          <Link href="/about" className="px-4 py-2 text-sm font-semibold tracking-wide transition-colors rounded-sm text-white/80 hover:text-[#F5A800]">
-            About Us
-          </Link>
-
-          <div
-            ref={dropdownRef}
-            className="relative"
-            onMouseEnter={() => setServicesOpen(true)}
-            onMouseLeave={() => setServicesOpen(false)}
-          >
-            <button
-              onClick={() => setServicesOpen((v) => !v)}
-              className={`flex items-center gap-1.5 px-4 py-2 text-sm font-semibold tracking-wide transition-colors rounded-sm ${
-                servicesOpen ? "bg-[#F5A800] text-[#0B1F3A]" : "text-white/80 hover:text-[#F5A800]"
-              }`}
-            >
-              Services
-              <ChevronRight className={`h-3.5 w-3.5 transition-transform ${servicesOpen ? "rotate-90" : "rotate-0"}`} />
-            </button>
-
-            <AnimatePresence>
-              {servicesOpen && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 8 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute left-0 top-full mt-2 w-[320px] rounded-md border border-[#F5A800]/20 bg-white shadow-2xl z-[60]"
-                >
-                  <div className="border-b border-gray-100 px-4 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-[#F5A800]">
-                    Our Services
-                  </div>
-                  <div className="py-2">
-                    {SERVICE_LINKS.map((service) => {
-                      const Icon = service.icon;
-                      return (
-                        <Link
-                          key={service.label}
-                          href={service.href}
-                          className="flex items-center gap-3 px-4 py-3 text-sm text-[#0B1F3A] hover:bg-[#F5A800]/5 hover:text-[#F5A800] transition-colors"
-                        >
-                          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F5A800]/10">
-                            <Icon className="h-4 w-4 text-[#F5A800]" />
-                          </div>
-                          <span>{service.label}</span>
-                        </Link>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          <Link href="/contact" className="px-4 py-2 text-sm font-semibold tracking-wide transition-colors rounded-sm text-white/80 hover:text-[#F5A800]">
-            Contact Us
-          </Link>
-          <Link href="/#news" className="px-4 py-2 text-sm font-semibold tracking-wide transition-colors rounded-sm text-white/80 hover:text-[#F5A800]">
-            News
-          </Link>
-        </div>
-
-        <button className="md:hidden text-white" onClick={() => setOpen(!open)} aria-label="Toggle menu">
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />} 
-        </button>
-      </div>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
-            className="md:hidden bg-[#0B1F3A] border-t border-white/10 overflow-hidden">
-            <div className="px-6 py-4 flex flex-col gap-2">
-              <Link href="/" className="py-2 text-sm font-semibold text-white/80 hover:text-[#F5A800] transition-colors">Home</Link>
-              <Link href="/about" className="py-2 text-sm font-semibold text-white/80 hover:text-[#F5A800] transition-colors">About Us</Link>
-
-              <button
-                onClick={() => setMobileServices((v) => !v)}
-                className="flex items-center justify-between py-2 text-left text-sm font-semibold text-white/80 hover:text-[#F5A800] transition-colors"
-              >
-                Services
-                <ChevronRight className={`h-4 w-4 transition-transform ${mobileServices ? "rotate-90" : "rotate-0"}`} />
-              </button>
-
-              <AnimatePresence>
-                {mobileServices && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                    <div className="ml-3 border-l border-white/10 pl-3 py-2 flex flex-col gap-2">
-                      {SERVICE_LINKS.map((service) => (
-                        <Link key={service.label} href={service.href} className="text-sm text-white/70 hover:text-[#F5A800] transition-colors">
-                          {service.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              <Link href="/contact" className="py-2 text-sm font-semibold text-white/80 hover:text-[#F5A800] transition-colors">Contact Us</Link>
-              <Link href="/#news" className="py-2 text-sm font-semibold text-white/80 hover:text-[#F5A800] transition-colors">News</Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
   );
 }
 
@@ -816,7 +667,7 @@ export default function HomePage() {
   return (
     <main>
       <TopBar />
-      <Navbar />
+      <Navbar active="Home" />
       <HeroSlider />
       <StatsBar />
       <AboutSection />

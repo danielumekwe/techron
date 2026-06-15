@@ -41,12 +41,12 @@ export default function Footer() {
         {/* Logo + social */}
         <div className="flex flex-col items-center mb-12">
           <div className="mb-4 flex items-center justify-center">
-            <div className="relative h-[70px] w-[250px] overflow-hidden rounded-md bg-transparent sm:h-[75px] sm:w-[250px]">
+            <div className="relative h-[70px] w-[200px] overflow-hidden rounded-md bg-transparent sm:h-[84px] sm:w-[200px]">
               <Image
                 src="/techronlogo.png"
                 alt="Techron Integrated Services logo"
                 fill
-                sizes="(max-width: 640px) 250px, 250px"
+                sizes="200px"
                 className="object-contain"
               />
             </div>
