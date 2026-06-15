@@ -47,7 +47,7 @@ const YoutubeIcon = () => (
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 interface Slide { bg: string; headline: string; sub: string; }
-interface Service { icon: React.ElementType; title: string; desc: string; img: string; }
+interface Service { icon: React.ElementType; title: string; desc: string; img: string; href: string; }
 interface NewsItem { tag: string; date: string; title: string; excerpt: string; img: string; }
 
 // ─── Data ──────────────────────────────────────────────────────────────────────
@@ -81,31 +81,36 @@ const SERVICES: Service[] = [
     icon: Wrench,
     title: "Engineering & Construction",
     desc: "Mechanical, electrical, civil & structural engineering; concept design, FEED, fabrication, structural steelworks, and pipeline laying.",
-    img: "https://images.unsplash.com/photo-1581092921461-7031e4f1adfe?w=600&q=70",
+    img: "/images/engineering-construction.jpg?w=600&q=70",
+    href: "/services/engineering-construction",
   },
   {
     icon: ShoppingCart,
     title: "Procurement & Supply Chain",
     desc: "Global sourcing of oilfield equipment, valves, pumps, piping systems, wellhead tools, and industrial materials with timely delivery.",
     img: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=70",
+    href: "/services/procurement-supply-chain",
   },
   {
     icon: Settings,
     title: "Installation, Inspection & Maintenance",
     desc: "EPCIC, commissioning, integrity management, preventive & corrective maintenance, IMR services, and CMMS-based asset & facility management.",
     img: "https://images.unsplash.com/photo-1565514158740-064f34bd6cfd?w=600&q=70",
+    href: "/services/installation-maintenance",
   },
   {
     icon: Anchor,
     title: "Subsea & Marine Services",
     desc: "Underwater inspections, ROV operations, diving support, pipeline surveys, vessel supply, crew change, and offshore logistics coordination.",
     img: "https://images.unsplash.com/photo-1493946740644-2d8a1f1a6aff?w=600&q=70",
+    href: "/services/subsea-marine",
   },
   {
     icon: Users,
     title: "Manpower Development",
     desc: "Training and supply of certified engineers, technicians, HSE officers, and project managers — scalable to client requirements.",
     img: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=600&q=70",
+    href: "/services/manpower-development",
   },
 ];
 
@@ -122,7 +127,7 @@ const NEWS: NewsItem[] = [
     date: "March 22, 2025",
     title: "Techron Achieves 500,000 Man-Hours Without Lost Time Incident",
     excerpt: "A landmark HSE milestone reaffirming our commitment to zero-harm operations across all project sites.",
-    img: "https://images.unsplash.com/photo-1581092921461-7031e4f1adfe?w=600&q=70",
+    img: "/images/oil-pipeline.jpg?w=600&q=70",
   },
   {
     tag: "News",
@@ -133,7 +138,16 @@ const NEWS: NewsItem[] = [
   },
 ];
 
-const CLIENTS = ["Chevron", "Shell", "TotalEnergies", "Mobil", "NNPC", "SLB"];
+const CLIENTS = [
+  { name: "Chevron",       logo: "https://logo.clearbit.com/chevron.com" },
+  { name: "Shell",         logo: "https://logo.clearbit.com/shell.com" },
+  { name: "TotalEnergies", logo: "https://logo.clearbit.com/totalenergies.com" },
+  { name: "ExxonMobil",   logo: "https://logo.clearbit.com/exxonmobil.com" },
+  { name: "NNPC",         logo: "https://logo.clearbit.com/nnpcgroup.com" },
+  { name: "SLB",          logo: "https://logo.clearbit.com/slb.com" },
+  { name: "Halliburton",  logo: "https://logo.clearbit.com/halliburton.com" },
+  { name: "Baker Hughes", logo: "https://logo.clearbit.com/bakerhughes.com" },
+];
 
 // ─── Animation helpers ─────────────────────────────────────────────────────────
 function FadeUp({ children, delay = 0, className = "" }: { children: React.ReactNode; delay?: number; className?: string }) {
@@ -254,7 +268,7 @@ function HeroSlider() {
                 className="inline-flex items-center gap-2 rounded-full bg-[#F5A800] px-7 py-3.5 text-base font-semibold text-[#0B1F3A] transition hover:bg-white">
                 Our Services <ArrowRight className="h-4 w-4" />
               </a>
-              <a href="#contact"
+              <a href="contact"
                 className="inline-flex items-center gap-2 rounded-full border border-white/25 px-7 py-3.5 text-base font-semibold text-white transition hover:border-[#F5A800] hover:text-[#F5A800]">
                 Contact Us
               </a>
@@ -371,6 +385,7 @@ function ServicesSection() {
             return (
               <FadeUp key={svc.title} delay={i * 0.09}
                 className={i === 4 ? "sm:col-span-2 lg:col-span-1" : ""}>
+                <Link href={svc.href} className="block h-full">
                 <div className="group relative h-full cursor-pointer overflow-hidden rounded-[24px] bg-white shadow-sm transition-all duration-300 hover:shadow-xl">
                   {/* Image */}
                   <div className="relative h-52 overflow-hidden">
@@ -397,6 +412,7 @@ function ServicesSection() {
                     </div>
                   </div>
                 </div>
+                </Link>
               </FadeUp>
             );
           })}
@@ -477,6 +493,7 @@ function CTABanner() {
 
 // ─── Clients ───────────────────────────────────────────────────────────────────
 function ClientsSection() {
+  const doubled = [...CLIENTS, ...CLIENTS];
   return (
     <section className="border-b border-gray-100 bg-white py-14">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -485,14 +502,24 @@ function ClientsSection() {
             Clients &amp; Partners
           </p>
         </FadeUp>
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-8 items-center">
-          {CLIENTS.map((name) => (
-            <FadeUp key={name}>
-              <div className="flex items-center justify-center h-12 grayscale hover:grayscale-0 opacity-50 hover:opacity-100 transition-all">
-                <span className="font-poppins font-black text-lg text-[#0B1F3A] tracking-tight">{name}</span>
+        <div className="overflow-hidden">
+          <div className="flex w-max animate-marquee items-center gap-16">
+            {doubled.map((client, i) => (
+              <div
+                key={i}
+                className="flex h-14 w-32 shrink-0 items-center justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+              >
+                <img
+                  src={client.logo}
+                  alt={client.name}
+                  className="max-h-10 max-w-[120px] object-contain"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).style.display = "none";
+                  }}
+                />
               </div>
-            </FadeUp>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
