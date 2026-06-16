@@ -139,14 +139,14 @@ const NEWS: NewsItem[] = [
 ];
 
 const CLIENTS = [
-  { name: "Chevron",       logo: "https://logo.clearbit.com/chevron.com" },
-  { name: "Shell",         logo: "https://logo.clearbit.com/shell.com" },
-  { name: "TotalEnergies", logo: "https://logo.clearbit.com/totalenergies.com" },
-  { name: "ExxonMobil",   logo: "https://logo.clearbit.com/exxonmobil.com" },
-  { name: "NNPC",         logo: "https://logo.clearbit.com/nnpcgroup.com" },
-  { name: "SLB",          logo: "https://logo.clearbit.com/slb.com" },
-  { name: "Halliburton",  logo: "https://logo.clearbit.com/halliburton.com" },
-  { name: "Baker Hughes", logo: "https://logo.clearbit.com/bakerhughes.com" },
+  { name: "Chevron",       logo: "/images/chevron.png" },
+  { name: "Shell",         logo: "/images/shell.png" },
+  { name: "TotalEnergies", logo: "/images/total.png" },
+  { name: "ExxonMobil",   logo: "/images/exxonmobil.png" },
+  { name: "NNPC",         logo: "/images/nnpc.png" },
+  { name: "SLB",          logo: "/images/slb.png" },
+  { name: "Halliburton",  logo: "/images/halliburton.png" },
+  { name: "Baker Hughes", logo: "/images/8.png" },
 ];
 
 // ─── Animation helpers ─────────────────────────────────────────────────────────
@@ -507,12 +507,12 @@ function ClientsSection() {
             {doubled.map((client, i) => (
               <div
                 key={i}
-                className="flex h-14 w-32 shrink-0 items-center justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                className="flex h-20 w-44 shrink-0 items-center justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
               >
                 <img
                   src={client.logo}
                   alt={client.name}
-                  className="max-h-10 max-w-[120px] object-contain"
+                  className="max-h-16 max-w-[160px] object-contain"
                   onError={(e) => {
                     (e.currentTarget as HTMLImageElement).style.display = "none";
                   }}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import {
@@ -196,6 +196,175 @@ function ContactCards() {
   );
 }
 
+function ContactForm() {
+  const [fields, setFields] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    service: "",
+    message: "",
+  });
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) {
+    setFields((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("loading");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(fields),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErrorMsg(data.error ?? "Something went wrong. Please try again.");
+        setStatus("error");
+      } else {
+        setStatus("success");
+        setFields({ name: "", email: "", phone: "", service: "", message: "" });
+      }
+    } catch {
+      setErrorMsg("Network error. Please check your connection and try again.");
+      setStatus("error");
+    }
+  }
+
+  const inputClass =
+    "mt-2 w-full rounded-2xl border border-[#E6EAF2] bg-[#F7F9FC] px-4 py-3 text-sm text-[#0B1F3A] outline-none transition placeholder:text-[#0B1F3A]/40 focus:border-[#F5A800] focus:bg-white";
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="mt-8 rounded-[32px] border border-[#E6EAF2] bg-white p-6 shadow-sm sm:p-8"
+    >
+      {status === "success" && (
+        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-green-200 bg-green-50 px-5 py-4">
+          <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-green-600" />
+          <div>
+            <p className="text-sm font-semibold text-green-800">Message sent successfully!</p>
+            <p className="mt-0.5 text-sm text-green-700">
+              Our team will review your enquiry and get back to you shortly.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {status === "error" && (
+        <div className="mb-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4">
+          <p className="text-sm font-semibold text-red-800">Failed to send message</p>
+          <p className="mt-0.5 text-sm text-red-700">{errorMsg}</p>
+        </div>
+      )}
+
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor="name" className="text-sm font-semibold text-[#0B1F3A]">
+            Full Name <span className="text-[#F5A800]">*</span>
+          </label>
+          <input
+            id="name"
+            name="name"
+            type="text"
+            required
+            placeholder="Your name"
+            value={fields.name}
+            onChange={handleChange}
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="email" className="text-sm font-semibold text-[#0B1F3A]">
+            Email Address <span className="text-[#F5A800]">*</span>
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder="you@example.com"
+            value={fields.email}
+            onChange={handleChange}
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="phone" className="text-sm font-semibold text-[#0B1F3A]">
+            Phone Number
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            placeholder="+234"
+            value={fields.phone}
+            onChange={handleChange}
+            className={inputClass}
+          />
+        </div>
+
+        <div>
+          <label htmlFor="service" className="text-sm font-semibold text-[#0B1F3A]">
+            Service Interest
+          </label>
+          <select
+            id="service"
+            name="service"
+            value={fields.service}
+            onChange={handleChange}
+            className={inputClass}
+          >
+            <option value="" disabled>
+              Select a service
+            </option>
+            <option value="epcic">EPCIC</option>
+            <option value="imr">Inspection, Maintenance and Repairs</option>
+            <option value="subsea">Subsea Services</option>
+            <option value="marine">Marine Support</option>
+            <option value="construction">Construction and Infrastructure</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="mt-5">
+        <label htmlFor="message" className="text-sm font-semibold text-[#0B1F3A]">
+          Message <span className="text-[#F5A800]">*</span>
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          rows={6}
+          required
+          placeholder="Tell us about your enquiry or project..."
+          value={fields.message}
+          onChange={handleChange}
+          className={`${inputClass} resize-none`}
+        />
+      </div>
+
+      <button
+        type="submit"
+        disabled={status === "loading"}
+        className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#F5A800] px-6 py-3 text-sm font-semibold text-[#0B1F3A] transition hover:bg-[#0B1F3A] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {status === "loading" ? "Sending…" : "Send Message"}
+        <Send className="h-4 w-4" />
+      </button>
+    </form>
+  );
+}
+
 function ContactSection() {
   const projectTypes = [
     "EPCIC projects",
@@ -247,90 +416,7 @@ function ContactSection() {
           </FadeUp>
 
           <FadeUp delay={0.2}>
-            <form className="mt-8 rounded-[32px] border border-[#E6EAF2] bg-white p-6 shadow-sm sm:p-8">
-              <div className="grid gap-5 sm:grid-cols-2">
-                <div>
-                  <label htmlFor="name" className="text-sm font-semibold text-[#0B1F3A]">
-                    Full Name
-                  </label>
-                  <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="Your name"
-                    className="mt-2 w-full rounded-2xl border border-[#E6EAF2] bg-[#F7F9FC] px-4 py-3 text-sm text-[#0B1F3A] outline-none transition placeholder:text-[#0B1F3A]/40 focus:border-[#F5A800] focus:bg-white"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="text-sm font-semibold text-[#0B1F3A]">
-                    Email Address
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    className="mt-2 w-full rounded-2xl border border-[#E6EAF2] bg-[#F7F9FC] px-4 py-3 text-sm text-[#0B1F3A] outline-none transition placeholder:text-[#0B1F3A]/40 focus:border-[#F5A800] focus:bg-white"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="phone" className="text-sm font-semibold text-[#0B1F3A]">
-                    Phone Number
-                  </label>
-                  <input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    placeholder="+234"
-                    className="mt-2 w-full rounded-2xl border border-[#E6EAF2] bg-[#F7F9FC] px-4 py-3 text-sm text-[#0B1F3A] outline-none transition placeholder:text-[#0B1F3A]/40 focus:border-[#F5A800] focus:bg-white"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="service" className="text-sm font-semibold text-[#0B1F3A]">
-                    Service Interest
-                  </label>
-                  <select
-                    id="service"
-                    name="service"
-                    className="mt-2 w-full rounded-2xl border border-[#E6EAF2] bg-[#F7F9FC] px-4 py-3 text-sm text-[#0B1F3A] outline-none transition focus:border-[#F5A800] focus:bg-white"
-                    defaultValue=""
-                  >
-                    <option value="" disabled>
-                      Select a service
-                    </option>
-                    <option value="epcic">EPCIC</option>
-                    <option value="imr">Inspection, Maintenance and Repairs</option>
-                    <option value="subsea">Subsea Services</option>
-                    <option value="marine">Marine Support</option>
-                    <option value="construction">Construction and Infrastructure</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="mt-5">
-                <label htmlFor="message" className="text-sm font-semibold text-[#0B1F3A]">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={6}
-                  placeholder="Tell us about your enquiry or project..."
-                  className="mt-2 w-full resize-none rounded-2xl border border-[#E6EAF2] bg-[#F7F9FC] px-4 py-3 text-sm text-[#0B1F3A] outline-none transition placeholder:text-[#0B1F3A]/40 focus:border-[#F5A800] focus:bg-white"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#F5A800] px-6 py-3 text-sm font-semibold text-[#0B1F3A] transition hover:bg-[#0B1F3A] hover:text-white"
-              >
-                Send Message
-                <Send className="h-4 w-4" />
-              </button>
-            </form>
+            <ContactForm />
           </FadeUp>
 
           <FadeUp delay={0.3}>
